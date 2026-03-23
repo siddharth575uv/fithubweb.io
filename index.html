@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>FitLife - Diet & Fitness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head> 
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🏋️ FitLife</h1>
+            <nav class="nav">
+                <button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="switchTab('bmi')">BMI Calculator</button>
+                <button class="nav-btn" onclick="switchTab('meals')">Meal Planner</button>
+                <button class="nav-btn" onclick="switchTab('routine')">Daily Routine</button>
+                <button class="nav-btn" onclick="switchTab('progress')">Progress</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Tab -->
+        <section id="dashboard" class="tab-content active">
+            <h2>Welcome to FitLife</h2>
+            <p class="subtitle">Your complete diet and fitness tracking companion</p>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>📊 Today's Summary</h3>
+                    <div class="summary-item">
+                        <span>Calories Consumed:</span>
+                        <span id="todayCalories" class="highlight">0 / 2000 kcal</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Water Intake:</span>
+                        <span id="todayWater" class="highlight">0 / 8 glasses</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Exercises Done:</span>
+                        <span id="todayExercises" class="highlight">0</span>
+                    </div>
+                    <button onclick="switchTab('bmi')" class="btn btn-primary">Calculate BMI</button>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>🎯 Quick Tips</h3>
+                    <ul class="tips-list">
+                        <li>✅ Drink 8 glasses of water daily</li>
+                        <li>✅ Eat 5 servings of fruits/vegetables</li>
+                        <li>✅ Exercise 30-45 minutes daily</li>
+                        <li>✅ Sleep 7-9 hours a night</li>
+                        <li>✅ Track your meals regularly</li>
+                        <li>✅ Avoid processed foods</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>🥗 Healthy Eating Rules</h3>
+                    <ul class="rules-list">
+                        <li><strong>Breakfast:</strong> High in protein & fiber</li>
+                        <li><strong>Lunch:</strong> Balanced meal with vegetables</li>
+                        <li><strong>Dinner:</strong> Light, early meal (7-8 PM)</li>
+                        <li><strong>Snacks:</strong> Fruits, nuts, yogurt</li>
+                        <li><strong>Hydration:</strong> 2-3 liters water daily</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BMI Calculator Tab -->
+        <section id="bmi" class="tab-content">
+            <h2>BMI Calculator</h2>
+            <p class="subtitle">Know your Body Mass Index and health status</p>
+            
+            <div class="calculator-grid">
+                <div class="calculator-card">
+                    <h3>Calculate Your BMI</h3>
+                    <form onsubmit="calculateBMI(event)">
+                        <div class="form-group">
+                            <label for="height">Height (cm):</label>
+                            <input type="number" id="height" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Weight (kg):</label>
+                            <input type="number" id="weight" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" id="age" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Calculate BMI</button>
+                    </form>
+                </div>
+
+                <div class="calculator-card">
+                    <h3>Your Result</h3>
+                    <div id="bmiResult" class="bmi-result-empty">
+                        <p>Enter your details to calculate</p>
+                    </div>
+                    <div id="bmiChart" class="bmi-chart">
+                        <div class="chart-item">
+                            <div class="chart-bar underweight"></div>
+                            <span>Underweight &lt;18.5</span>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-bar normal"></div>
+                            <span>Normal 18.5-24.9</span>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-bar overweight"></div>
+                            <span>Overweight 25-29.9</span>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-bar obese"></div>
+                            <span>Obese &gt;30</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>📋 Daily Calorie Requirements</h3>
+                <p>Based on your BMI and activity level, here are recommended daily calories:</p>
+                <div class="calories-info">
+                    <div class="calorie-item">
+                        <strong>Sedentary:</strong> <span id="sedentaryCalories">0</span> kcal
+                    </div>
+                    <div class="calorie-item">
+                        <strong>Moderate Activity:</strong> <span id="moderateCalories">0</span> kcal
+                    </div>
+                    <div class="calorie-item">
+                        <strong>Very Active:</strong> <span id="activeCalories">0</span> kcal
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meal Planner Tab -->
+        <section id="meals" class="tab-content">
+            <h2>Meal Planner</h2>
+            <p class="subtitle">Track your daily meals and calories</p>
+            
+            <div class="meals-container">
+                <div class="meals-input">
+                    <h3>Add Meal</h3>
+                    <form onsubmit="addMeal(event)">
+                        <div class="form-group">
+                            <label for="mealType">Meal Type:</label>
+                            <select id="mealType" required>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                                <option value="Snack">Snack</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="foodItem">Food Item:</label>
+                            <input type="text" id="foodItem" placeholder="e.g., Oatmeal with berries" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories:</label>
+                            <input type="number" id="calories" placeholder="e.g., 350" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="protein">Protein (g):</label>
+                            <input type="number" id="protein" step="0.1" placeholder="e.g., 15">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Meal</button>
+                    </form>
+
+                    <div class="water-tracker">
+                        <h4>Water Intake</h4>
+                        <div class="water-controls">
+                            <button onclick="addWater()" class="btn btn-small">+ Add Glass</button>
+                            <span id="waterCount">0 / 8 glasses</span>
+                            <button onclick="resetWater()" class="btn btn-secondary btn-small">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="meals-list">
+                    <h3>Today's Meals</h3>
+                    <div id="mealsList" class="meals-display">
+                        <p class="empty-state">No meals added yet. Start tracking!</p>
+                    </div>
+                    <div class="meals-summary">
+                        <h4>Daily Summary</h4>
+                        <div class="summary-stat">
+                            <span>Total Calories:</span>
+                            <span id="totalCalories">0</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span>Total Protein:</span>
+                            <span id="totalProtein">0 g</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span>Remaining:</span>
+                            <span id="remainingCalories">2000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="food-guide">
+                <h3>🥗 Healthy Food Options (Calories per serving)</h3>
+                <div class="food-grid">
+                    <div class="food-item">
+                        <strong>Vegetables</strong>
+                        <p>Spinach: 7 kcal | Broccoli: 34 kcal<br>Carrot: 25 kcal | Tomato: 18 kcal</p>
+                    </div>
+                    <div class="food-item">
+                        <strong>Fruits</strong>
+                        <p>Apple: 52 kcal | Banana: 89 kcal<br>Orange: 47 kcal | Berries: 40 kcal</p>
+                    </div>
+                    <div class="food-item">
+                        <strong>Proteins</strong>
+                        <p>Chicken: 165 kcal | Fish: 206 kcal<br>Eggs: 155 kcal | Tofu: 86 kcal</p>
+                    </div>
+                    <div class="food-item">
+                        <strong>Grains</strong>
+                        <p>Oats: 150 kcal | Brown Rice: 111 kcal<br>Whole Wheat Bread: 80 kcal</p>
+                    </div>
+                    <div class="food-item">
+                        <strong>Dairy</strong>
+                        <p>Yogurt: 100 kcal | Milk: 61 kcal<br>Cheese: 113 kcal</p>
+                    </div>
+                    <div class="food-item">
+                        <strong>Nuts & Seeds</strong>
+                        <p>Almonds: 164 kcal | Peanuts: 161 kcal<br>Chia Seeds: 138 kcal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Routine Tab -->
+        <section id="routine" class="tab-content">
+            <h2>Daily Routine Schedule</h2>
+            <p class="subtitle">Plan your daily activities for optimal fitness and health</p>
+            
+            <div class="routine-container">
+                <div class="routine-input">
+                    <h3>Add Activity</h3>
+                    <form onsubmit="addActivity(event)">
+                        <div class="form-group">
+                            <label for="time">Time:</label>
+                            <input type="time" id="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="activity">Activity:</label>
+                            <input type="text" id="activity" placeholder="e.g., Morning Yoga" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (minutes):</label>
+                            <input type="number" id="duration" placeholder="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="calories">Calories Burned:</label>
+                            <input type="number" id="caloriesBurned" placeholder="200" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Activity</button>
+                    </form>
+                </div>
+
+                <div class="routine-list">
+                    <h3>Today's Schedule</h3>
+                    <div id="routineList" class="routine-display">
+                        <p class="empty-state">No activities scheduled yet</p>
+                    </div>
+                    <div class="routine-summary">
+                        <h4>Activity Summary</h4>
+                        <div class="summary-stat">
+                            <span>Total Exercise Time:</span>
+                            <span id="totalDuration">0 min</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span>Calories Burned:</span>
+                            <span id="totalBurned">0 kcal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sample-routine">
+                <h3>📅 Sample Daily Routine for Fitness</h3>
+                <div class="routine-cards">
+                    <div class="routine-card">
+                        <h4>🌅 Morning (6-9 AM)</h4>
+                        <ul>
+                            <li><strong>6:00 AM:</strong> Wake up, drink water</li>
+                            <li><strong>6:15 AM:</strong> Stretching (10 min)</li>
+                            <li><strong>6:30 AM:</strong> Cardio (30 min) - 300 kcal</li>
+                            <li><strong>7:15 AM:</strong> Shower & breakfast</li>
+                        </ul>
+                    </div>
+                    <div class="routine-card">
+                        <h4>☀️ Day (9 AM-6 PM)</h4>
+                        <ul>
+                            <li><strong>9:00 AM:</strong> Work/Study</li>
+                            <li><strong>12:30 PM:</strong> Lunch (30 min)</li>
+                            <li><strong>3:00 PM:</strong> Light walk (15 min) - 80 kcal</li>
+                            <li><strong>4:00 PM:</strong> Snack + Water</li>
+                        </ul>
+                    </div>
+                    <div class="routine-card">
+                        <h4>🌙 Evening (6-10 PM)</h4>
+                        <ul>
+                            <li><strong>6:00 PM:</strong> Strength training (40 min) - 400 kcal</li>
+                            <li><strong>7:00 PM:</strong> Dinner & rest</li>
+                            <li><strong>8:30 PM:</strong> Light yoga/stretching (15 min)</li>
+                            <li><strong>10:00 PM:</strong> Sleep</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-guide">
+                <h3>💪 Exercise Guide (Calories Burned per 30 min)</h3>
+                <div class="exercise-grid">
+                    <div class="exercise-item">
+                        <strong>Cardio</strong>
+                        <p>Running: 350 kcal | Cycling: 250 kcal<br>Swimming: 275 kcal | Jump Rope: 275 kcal</p>
+                    </div>
+                    <div class="exercise-item">
+                        <strong>Strength</strong>
+                        <p>Weight Training: 180 kcal | Push-ups: 150 kcal<br>Resistance: 200 kcal</p>
+                    </div>
+                    <div class="exercise-item">
+                        <strong>Flexibility</strong>
+                        <p>Yoga: 120 kcal | Stretching: 60 kcal<br>Pilates: 150 kcal</p>
+                    </div>
+                    <div class="exercise-item">
+                        <strong>Sports</strong>
+                        <p>Tennis: 250 kcal | Basketball: 240 kcal<br>Soccer: 260 kcal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Tab -->
+        <section id="progress" class="tab-content">
+            <h2>Progress Tracking</h2>
+            <p class="subtitle">Monitor your fitness and weight loss journey</p>
+            
+            <div class="progress-container">
+                <div class="progress-input">
+                    <h3>Record Progress</h3>
+                    <form onsubmit="recordProgress(event)">
+                        <div class="form-group">
+                            <label for="progressDate">Date:</label>
+                            <input type="date" id="progressDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="currentWeight">Weight (kg):</label>
+                            <input type="number" id="currentWeight" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bodyFat">Body Fat %:</label>
+                            <input type="number" id="bodyFat" step="0.1" placeholder="Optional">
+                        </div>
+                        <div class="form-group">
+                            <label for="waist">Waist (cm):</label>
+                            <input type="number" id="waist" step="0.1" placeholder="Optional">
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea id="notes" placeholder="How did you feel today?" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Record Progress</button>
+                    </form>
+                </div>
+
+                <div class="progress-stats">
+                    <h3>Your Stats</h3>
+                    <div id="progressData" class="progress-display">
+                        <p class="empty-state">No progress recorded yet</p>
+                    </div>
+                    <div class="progress-info">
+                        <h4>Quick Stats</h4>
+                        <div class="stat-item">
+                            <span>Total Weight Loss:</span>
+                            <span id="weightLoss">0 kg</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Current Streak:</span>
+                            <span id="streak">0 days</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Total Records:</span>
+                            <span id="recordCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h3>🎯 Tips for Successful Weight Loss</h3>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>1. Set Realistic Goals</h4>
+                        <p>Aim for 0.5-1 kg weight loss per week. This is healthy and sustainable.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>2. Track Everything</h4>
+                        <p>Log all meals, drinks, and exercises for accurate progress tracking.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>3. Calorie Deficit</h4>
+                        <p>Consume 300-500 calories less than your daily requirement.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>4. Stay Hydrated</h4>
+                        <p>Drink 2-3 liters of water daily. It helps with metabolism.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>5. Exercise Regularly</h4>
+                        <p>Combine cardio (150 min/week) and strength training (2-3x/week).</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>6. Sleep Well</h4>
+                        <p>Get 7-9 hours of quality sleep for better recovery and metabolism.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="motivation">
+                <h3>💡 Motivation</h3>
+                <p id="motivationQuote" class="quote"></p>
+                <button onclick="getNewQuote()" class="btn btn-primary">New Motivation</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 FitLife - Your Personal Diet & Fitness Companion | Stay Healthy, Stay Strong! 💪</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
